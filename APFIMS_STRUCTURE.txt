@@ -1,0 +1,18 @@
+APFIMS/
+│
+├── admin/
+├── seller/
+├── buyer/
+├── config/
+│     └── database.php
+├── assets/
+│     ├── css/
+│     ├── js/
+│     ├── images/
+├── includes/
+├── uploads/
+├── login.php
+├── register.php
+├── dashboard.php
+├── logout.php
+└── index.php

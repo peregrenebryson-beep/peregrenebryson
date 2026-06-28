@@ -1,0 +1,33 @@
+# Prevent directory listing
+Options -Indexes
+
+# Protect sensitive files
+<FilesMatch "^(config\.php|database\.sql|\.env|\.git)">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Protect includes directory
+<Files ~ "^includes">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Prevent access to hidden files
+<FilesMatch "^\.(htaccess|htpasswd)">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Enable HTTPS (uncomment if using SSL)
+# RewriteEngine On
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Security headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
