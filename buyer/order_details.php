@@ -81,7 +81,7 @@ $items_result = mysqli_stmt_get_result($stmt);
                                             <?php echo htmlspecialchars($item['product_name']); ?>
                                         </td>
                                         <td>TZS <?php echo number_format($item['price'], 2); ?></td>
-                                        <td><?php echo $item['quantity']; ?></td>
+                                        <td><?php echo htmlspecialchars($item['quantity']); ?></td>
                                         <td>TZS <?php echo number_format($item['price'] * $item['quantity'], 2); ?></td>
                                     </tr>
                                     <?php } ?>

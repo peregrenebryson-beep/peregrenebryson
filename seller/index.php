@@ -71,15 +71,15 @@ include "../config/database.php";
                                         <td><?php echo htmlspecialchars($row['name']); ?></td>
                                         <td><?php echo htmlspecialchars($row['category_name']); ?></td>
                                         <td>TZS <?php echo number_format($row['price'], 2); ?></td>
-                                        <td><?php echo $row['stock']; ?></td>
+                                        <td><?php echo htmlspecialchars($row['stock']); ?></td>
                                         <td>
                                             <span class="badge bg-<?php echo $row['status'] == 'active' ? 'success' : 'secondary'; ?>">
                                                 <?php echo $row['status']; ?>
                                             </span>
                                         </td>
                                         <td>
-                                            <a href="edit_product.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-primary">Edit</a>
-                                            <a href="delete_product.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?');">Delete</a>
+                                            <a href="edit_product.php?id=<?php echo htmlspecialchars($row['id']); ?>" class="btn btn-sm btn-primary">Edit</a>
+                                            <a href="delete_product.php?id=<?php echo htmlspecialchars($row['id']); ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?');">Delete</a>
                                         </td>
                                     </tr>
                                     <?php } ?>

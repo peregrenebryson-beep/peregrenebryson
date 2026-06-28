@@ -1,7 +1,11 @@
 <?php
-session_start();
+include "includes/session_config.php";
 
-$id = $_GET['id'];
+if(!isset($_GET['id']) || !is_numeric($_GET['id'])){
+    die("Invalid product ID");
+}
+
+$id = intval($_GET['id']);
 
 if(!isset($_SESSION['cart'])){
     $_SESSION['cart'] = [];

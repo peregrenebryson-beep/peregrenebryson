@@ -31,9 +31,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     exit();
 }
 
-// Handle delete
-if(isset($_GET['delete'])){
-    $id = intval($_GET['delete']);
+// Handle delete with CSRF protection
+if(isset($_POST['delete'])){
+    if(!isset($_POST['csrf_token']) || !validateCsrfToken($_POST['csrf_token'])){
+        die("Invalid request");
+    }
+    $id = intval($_POST['delete']);
     $stmt = mysqli_prepare($conn, "DELETE FROM categories WHERE id = ?");
     mysqli_stmt_bind_param($stmt, "i", $id);
     mysqli_stmt_execute($stmt);
@@ -92,18 +95,22 @@ if(isset($_GET['edit'])){
                                         mysqli_stmt_close($count_stmt);
                                     ?>
                                     <tr>
-                                        <td><?php echo $cat['id']; ?></td>
+                                        <td><?php echo htmlspecialchars($cat['id']); ?></td>
                                         <td><?php echo htmlspecialchars($cat['name']); ?></td>
                                         <td><?php echo htmlspecialchars(substr($cat['description'], 0, 50)); ?>...</td>
                                         <td><span class="badge bg-info"><?php echo $count['count']; ?></span></td>
                                         <td><?php echo date('Y-m-d', strtotime($cat['created_at'])); ?></td>
                                         <td>
-                                            <a href="categories.php?edit=<?php echo $cat['id']; ?>" class="btn btn-sm btn-primary">
+                                            <a href="categories.php?edit=<?php echo htmlspecialchars($cat['id']); ?>" class="btn btn-sm btn-primary">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a href="categories.php?delete=<?php echo $cat['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?');">
-                                                <i class="fas fa-trash"></i>
-                                            </a>
+                                            <form method="POST" style="display: inline;">
+                                                <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
+                                                <input type="hidden" name="delete" value="<?php echo htmlspecialchars($cat['id']); ?>">
+                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?');">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
                                         </td>
                                     </tr>
                                     <?php } ?>

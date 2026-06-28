@@ -46,15 +46,21 @@ $result = $conn->query($check);
 if ($result->num_rows == 0) {
     // Insert admin user with password: admin123
     $hashed_password = password_hash("admin123", PASSWORD_DEFAULT);
-    $sql = "INSERT INTO users (fullname, email, password, role) VALUES ('Admin User', 'admin@apfims.com', '$hashed_password', 'admin')";
+    $sql = "INSERT INTO users (fullname, email, password, role) VALUES (?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssss", $fullname, $email, $hashed_password, $role);
+    $fullname = "Admin User";
+    $email = "admin@apfims.com";
+    $role = "admin";
     
-    if ($conn->query($sql) === TRUE) {
+    if ($stmt->execute()) {
         echo "Admin user created successfully.<br>";
         echo "Email: admin@apfims.com<br>";
         echo "Password: admin123<br>";
     } else {
-        die("Error creating admin user: " . $conn->error);
+        die("Error creating admin user: " . $stmt->error);
     }
+    $stmt->close();
 } else {
     echo "Admin user already exists.<br>";
 }

@@ -1,11 +1,14 @@
 <?php include "includes/header.php"; ?>
 <?php include "../config/database.php"; ?>
+<?php include "../includes/csrf.php"; ?>
+$csrf_token = generateCsrfToken();
 
 <h3>Categories</h3>
 
 <!-- ADD CATEGORY FORM -->
 <div class="card p-3 mb-3">
     <form method="POST">
+        <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
         <div class="row">
             <div class="col-md-8">
                 <input type="text" name="category_name" class="form-control" placeholder="Enter category name" required>
@@ -20,10 +23,16 @@
 <?php
 // INSERT CATEGORY
 if(isset($_POST['add'])){
-    $name = $_POST['category_name'];
+    if(!isset($_POST['csrf_token']) || !validateCsrfToken($_POST['csrf_token'])){
+        die("Invalid request");
+    }
+    $name = htmlspecialchars(trim($_POST['category_name']));
 
-    $sql = "INSERT INTO categories(category_name) VALUES('$name')";
-    mysqli_query($conn, $sql);
+    $sql = "INSERT INTO categories(name) VALUES(?)";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $name);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
 
     echo "<script>window.location='categories.php';</script>";
 }
@@ -48,10 +57,10 @@ while($row = mysqli_fetch_assoc($result)){
 ?>
 
 <tr>
-    <td><?php echo $row['id']; ?></td>
-    <td><?php echo $row['category_name']; ?></td>
+    <td><?php echo htmlspecialchars($row['id']); ?></td>
+    <td><?php echo htmlspecialchars($row['name']); ?></td>
     <td>
-        <a href="delete_category.php?id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm">Delete</a>
+        <a href="delete_category.php?id=<?php echo htmlspecialchars($row['id']); ?>" class="btn btn-danger btn-sm">Delete</a>
     </td>
 </tr>
 

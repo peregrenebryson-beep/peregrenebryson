@@ -97,12 +97,14 @@ if ($result->num_rows == 0) {
         ['Sports', 'Sports equipment and accessories']
     ];
     
+    $stmt = $conn->prepare("INSERT INTO categories (name, description) VALUES (?, ?)");
     foreach ($categories as $cat) {
-        $stmt = $conn->prepare("INSERT INTO categories (name, description) VALUES (?, ?)");
-        $stmt->bind_param("ss", $cat[0], $cat[1]);
+        $name = $cat[0];
+        $description = $cat[1];
+        $stmt->bind_param("ss", $name, $description);
         $stmt->execute();
-        $stmt->close();
     }
+    $stmt->close();
     echo "Default categories inserted.<br>";
 }
 

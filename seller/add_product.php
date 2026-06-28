@@ -56,7 +56,7 @@ $categories = mysqli_stmt_get_result($stmt);
                                 <select name="category_id" class="form-control" required>
                                     <option value="">Select Category</option>
                                     <?php while($cat = mysqli_fetch_assoc($categories)){ ?>
-                                    <option value="<?php echo $cat['id']; ?>"><?php echo htmlspecialchars($cat['name']); ?></option>
+                                    <option value="<?php echo htmlspecialchars($cat['id']); ?>"><?php echo htmlspecialchars($cat['name']); ?></option>
                                     <?php } ?>
                                 </select>
                             </div>

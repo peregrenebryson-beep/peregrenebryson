@@ -63,7 +63,7 @@ $csrf_token = generateCsrfToken();
                     <div class="card-body">
                         <form action="edit_product_process.php" method="POST" enctype="multipart/form-data">
                             <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
-                            <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+                            <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['id']); ?>">
                             
                             <div class="mb-3">
                                 <label>Product Name</label>
@@ -74,7 +74,7 @@ $csrf_token = generateCsrfToken();
                                 <label>Category</label>
                                 <select name="category_id" class="form-control" required>
                                     <?php while($cat = mysqli_fetch_assoc($categories)){ ?>
-                                    <option value="<?php echo $cat['id']; ?>" <?php echo $cat['id'] == $product['category_id'] ? 'selected' : ''; ?>>
+                                    <option value="<?php echo htmlspecialchars($cat['id']); ?>" <?php echo $cat['id'] == $product['category_id'] ? 'selected' : ''; ?>>
                                         <?php echo htmlspecialchars($cat['name']); ?>
                                     </option>
                                     <?php } ?>

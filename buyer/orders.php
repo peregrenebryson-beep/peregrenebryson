@@ -80,7 +80,7 @@ if(!isset($_SESSION['id']) || $_SESSION['role'] != 'buyer'){
                                                 <?php echo ucfirst($row['status']); ?>
                                             </span>
                                         </td>
-                                        <td><?php echo $row['item_count']; ?></td>
+                                        <td><?php echo htmlspecialchars($row['item_count']); ?></td>
                                         <td><?php echo htmlspecialchars(substr($row['shipping_address'], 0, 30)); ?>...</td>
                                         <td><?php echo htmlspecialchars($row['phone']); ?></td>
                                         <td>

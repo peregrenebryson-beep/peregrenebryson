@@ -3,9 +3,12 @@ include 'layout.php';
 include '../includes/csrf.php';
 $csrf_token = generateCsrfToken();
 
-// Handle delete
-if(isset($_GET['delete'])){
-    $id = intval($_GET['delete']);
+// Handle delete with CSRF protection
+if(isset($_POST['delete'])){
+    if(!isset($_POST['csrf_token']) || !validateCsrfToken($_POST['csrf_token'])){
+        die("Invalid request");
+    }
+    $id = intval($_POST['delete']);
     $stmt = mysqli_prepare($conn, "DELETE FROM products WHERE id = ?");
     mysqli_stmt_bind_param($stmt, "i", $id);
     mysqli_stmt_execute($stmt);
@@ -72,9 +75,13 @@ $products = mysqli_stmt_get_result($stmt);
                                         <td><?php echo date('Y-m-d', strtotime($row['created_at'])); ?></td>
                                         <td>
                                             <a href="#" class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></a>
-                                            <a href="products.php?delete=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?');">
-                                                <i class="fas fa-trash"></i>
-                                            </a>
+                                            <form method="POST" style="display: inline;">
+                                                <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
+                                                <input type="hidden" name="delete" value="<?php echo htmlspecialchars($row['id']); ?>">
+                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?');">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
                                         </td>
                                     </tr>
                                     <?php } ?>

@@ -1,8 +1,8 @@
 <?php
-session_start();
+include "includes/session_config.php";
 
-if(!isset($_SESSION['id']) || $_SESSION['role'] != 'Admin'){
-    header("Location: ../login.php");
+if(!isset($_SESSION['id']) || $_SESSION['role'] != 'admin'){
+    header("Location: login.php");
     exit();
 }
 ?>
