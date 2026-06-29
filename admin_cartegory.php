@@ -1,6 +1,6 @@
-<?php include "includes/header.php"; ?>
-<?php include "../config/database.php"; ?>
-<?php include "../includes/csrf.php"; ?>
+<?php include "header.php"; ?>
+<?php include "config/database.php"; ?>
+<?php include "includes/csrf.php"; ?>
 $csrf_token = generateCsrfToken();
 
 <h3>Categories</h3>
@@ -34,7 +34,7 @@ if(isset($_POST['add'])){
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
 
-    echo "<script>window.location='categories.php';</script>";
+    echo "<script>window.location='admin_cartegory.php';</script>";
 }
 ?>
 
@@ -60,7 +60,7 @@ while($row = mysqli_fetch_assoc($result)){
     <td><?php echo htmlspecialchars($row['id']); ?></td>
     <td><?php echo htmlspecialchars($row['name']); ?></td>
     <td>
-        <a href="delete_category.php?id=<?php echo htmlspecialchars($row['id']); ?>" class="btn btn-danger btn-sm">Delete</a>
+        <a href="admin_cartegory_delete.php?id=<?php echo htmlspecialchars($row['id']); ?>" class="btn btn-danger btn-sm">Delete</a>
     </td>
 </tr>
 
@@ -70,4 +70,4 @@ while($row = mysqli_fetch_assoc($result)){
 
 </div>
 
-<?php include "includes/footer.php"; ?>
+<?php include "footer.php"; ?>

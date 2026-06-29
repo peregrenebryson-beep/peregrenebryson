@@ -1,7 +1,7 @@
-<?php include "includes/header.php"; ?>
+<?php include "header.php"; ?>
 
 <h2>Admin Dashboard</h2>
-<p>Welcome, <?php echo $_SESSION['fullname']; ?></p>
+<p>Welcome, <?php echo htmlspecialchars($_SESSION['fullname']); ?></p>
 
 <div class="row">
 
@@ -31,4 +31,4 @@
 
 </div>
 
-<?php include "includes/footer.php"; ?>
+<?php include "footer.php"; ?>
