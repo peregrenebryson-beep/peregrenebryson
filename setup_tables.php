@@ -2,17 +2,19 @@
 
 include "config/database.php";
 
-// Disable foreign key checks to drop tables
+// Check if tables already exist - if so, skip creation
+$check_tables = "SHOW TABLES LIKE 'categories'";
+$result = $conn->query($check_tables);
+
+if ($result->num_rows > 0) {
+    echo "Tables already exist. Skipping creation.<br>";
+    echo "If you want to recreate tables, please drop them manually first.<br>";
+    echo "<br><strong>Setup complete!</strong> <a href='login.php'>Go to Login</a>";
+    exit();
+}
+
+// Disable foreign key checks for table creation
 $conn->query("SET FOREIGN_KEY_CHECKS = 0");
-
-// Drop existing tables to ensure clean creation (in correct order)
-$conn->query("DROP TABLE IF EXISTS order_items");
-$conn->query("DROP TABLE IF EXISTS orders");
-$conn->query("DROP TABLE IF EXISTS products");
-$conn->query("DROP TABLE IF EXISTS categories");
-
-// Re-enable foreign key checks
-$conn->query("SET FOREIGN_KEY_CHECKS = 1");
 
 // Create categories table
 $sql = "CREATE TABLE IF NOT EXISTS categories (
