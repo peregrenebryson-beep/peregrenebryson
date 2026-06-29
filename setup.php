@@ -23,6 +23,22 @@ if ($conn->query($sql) === TRUE) {
 // Select database
 $conn->select_db("apfims");
 
+// Check if users table exists and has issues
+$check_table = "SHOW TABLES LIKE 'users'";
+$result = $conn->query($check_table);
+
+if ($result->num_rows > 0) {
+    // Table exists, try to check if it's corrupted
+    try {
+        $conn->query("SELECT COUNT(*) FROM users");
+        echo "Users table exists and is accessible.<br>";
+    } catch (Exception $e) {
+        // Table exists but has issues, try to recreate
+        echo "Users table exists but has issues. Recreating...<br>";
+        $conn->query("DROP TABLE IF EXISTS users");
+    }
+}
+
 // Create users table
 $sql = "CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -34,7 +50,7 @@ $sql = "CREATE TABLE IF NOT EXISTS users (
 )";
 
 if ($conn->query($sql) === TRUE) {
-    echo "Users table created or already exists.<br>";
+    echo "Users table created successfully.<br>";
 } else {
     die("Error creating table: " . $conn->error);
 }
